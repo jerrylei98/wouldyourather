@@ -5,7 +5,7 @@ def create_db():
     #if not path.isfile("database.db"):
     conn = sqlite3.connect("database.db") #creates database.db if doesn't exist
     c = conn.cursor()
-    c.execute("CREATE TABLE IF NOT EXISTS login(user TEXT, password TEXT)")
+    c.execute("CREATE TABLE IF NOT EXISTS login(user TEXT, password TEXT)") ##email, confirmation doable
 
     c.execute("CREATE TABLE IF NOT EXISTS game(optA TEXT, optAnum INT, optB TEXT, optBnum INT)")
     #==|optA      |optAnum    |optB       |optBnum    |===#
