@@ -73,3 +73,17 @@ def get_ques(rowid):
     ret_dict['optBres'] = ret[3]
     conn.close()
     return ret_dict
+
+def update_row(rowid, opt):
+    if opt == 0:
+        conn = sqlite3.connect("database.db")
+        c = conn.cursor()
+        c.execute("UPDATE game SET optAnum = optAnum + 1 WHERE rowid = ?", (rowid,))
+        conn.commit()
+        conn.close()
+    elif opt == 1:
+        conn = sqlite3.connect("database.db")
+        c = conn.cursor()
+        c.execute("UPDATE game SET optBnum = optBnum + 1 WHERE rowid = ?", (rowid,))
+        conn.commit()
+        conn.close()

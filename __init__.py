@@ -9,9 +9,9 @@ app.secret_key = 'thequickbrownfoxjumpsoverthelazydog'
 @app.route("/", methods=["GET","POST"])
 def index():
     if request.method == "GET":
+        session['unique'] = num_rows() + 1
         return render_template("index.html", username = session.get('username'))
     elif request.method == "POST":
-        session['unique'] = num_rows()
         button = request.form['button']
         if button == "Sign In":
             uname = request.form.get('in_username')
@@ -27,12 +27,26 @@ def index():
             return render_template("index.html", username = session.get('username'))
         return render_template("index.html", username = session.get('username'))
 
-@app.route("/play")
+@app.route("/play", methods=["GET","POST"])
 def play():
-    game = get_ques(session['unique'])
-    session['unique'] -= 1
-    return render_template("play.html", username = session.get('username'), optA = game['optA'], optB = game['optB'], optAres = game['optAres'], optBres = game['optBres'])
-
+    if request.method == "GET":
+        if session['unique'] >= 1:
+            game = get_ques(session['unique'])
+        return render_template("play.html", username = session.get('username'), optA = game['optA'], optB = game['optB'], optAres = game['optAres'], optBres = game['optBres'])
+    elif request.method == "POST":
+        button = request.form['button']
+        game = get_ques(session['unique'])
+        if button == str(game['optAres']) + " people agree":
+            print "HERE"
+            update_row(session['unique'], 0)
+            session['unique'] -= 1
+            return redirect('/play')
+        if button == str(game['optBres']) + " people agree ":
+            print "HERE"
+            update_row(session['unique'], 1)
+            session['unique'] -=1
+            return redirect('/play')
+        return redirect('/play')
 
 @app.route("/profile")
 @app.route("/profile/<uname>", methods=["GET","POST"])
