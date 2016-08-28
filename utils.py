@@ -1,18 +1,45 @@
-from setup import *
 from os import path
 import md5
 
-#=== Creates database if database isn't in main dir ===#
+"""
+=== Creates database.db if database is not in the main directory (runs when imported by __init__.py) ===
+    Table: game
+    #==|optA      |optAnum    |optB       |optBnum    |===#
+    #=====================================================#
+    #==|explore x |12344      |explore y  |1222       |===#
+    #==|eat x     |44442      |eat y      |1233       |===#
+"""
 if not path.isfile("database.db"):
-    create_db()
+    conn = sqlite3.connect("database.db") #creates database.db if doesn't exist
+    c = conn.cursor()
+    c.execute("CREATE TABLE IF NOT EXISTS login(user TEXT, password TEXT)") ##email, confirmation doable
+    c.execute("CREATE TABLE IF NOT EXISTS game(optA TEXT, optAnum INT, optB TEXT, optBnum INT)")
+    conn.commit()
+    conn.close()
 
-#=== Helper function to salt and hash ===#
+"""
+=== Hashes password with user ===
+Input:
+- user - string
+- password - string
+Returns: hashed password - string
+"""
 def saltnhash(user,password):
     m = md5.new()
     m.update(user + password)
     return m.hexdigest()
 
-#=== Adds user and password ===#
+"""
+=== Checks if user is in table: login ===
+=== Adds user to database.db with password hashed ===
+Input:
+- user - string
+- password - string
+Depends on fn: saltnhash(user,password)
+Returns:
+- True if user is added
+- False if user is already taken
+"""
 def create_user(user, password):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
@@ -26,7 +53,16 @@ def create_user(user, password):
     conn.close()
     return True
 
-#=== Checks if user and password are in db ===#
+"""
+===Used to authenticate user===
+Input:
+- user - string
+- password - string
+Depends on fn: saltnhash(user,password)
+Returns:
+- True if user+pass matches
+- False if user+pass does not match
+"""
 def check_user(user, password):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
@@ -46,7 +82,10 @@ def add_question(optA, optB):
     conn.close()
     return True
 
-#=== Counts how many questions there are and returns a list of that length ===#
+"""
+Returns:
+- how many rows are in table: game in database.db
+"""
 def num_rows():
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
@@ -54,13 +93,15 @@ def num_rows():
     num = c.fetchone()[0]
     conn.close()
     return num
-    """
-    l = []
-    for x in xrange(num):
-        l.append(0)
-    """
 
-#=== Get question by rowid - Returns dict containing optA, optB, optAres, optBres ===#
+"""
+=== Grabs row from table: game in database.db ===
+Input:
+- rowid - Integer
+Returns:
+- Dictionary containing: optionA,optionB,results of each
+ex. {'optA': 'eat candy', 'optAres': 24, 'optB': 'eat chips', 'optBres': 17}
+"""
 def get_ques(rowid):
     ret_dict = {}
     conn = sqlite3.connect("database.db")
@@ -74,6 +115,12 @@ def get_ques(rowid):
     conn.close()
     return ret_dict
 
+"""
+=== Increments the option number from table: game in database.db ===
+Input:
+- rowid - Integer
+- opt - Integer (0 for optA, 1 for optB)
+"""
 def update_row(rowid, opt):
     if opt == 0:
         conn = sqlite3.connect("database.db")
