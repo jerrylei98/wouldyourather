@@ -16,8 +16,6 @@
 
 ### Log:
 
-- (Aug 15) Initialize
-
 - (Aug 27) Login, profile, html files
 
 - (Aug 28) Finishing touches
