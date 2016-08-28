@@ -1,0 +1,13 @@
+{% extends "master.html" %}
+{% block body %}
+
+<center>
+<img src="{{prof_pic}}">
+<form action="upload" method="post" enctype="multipart/form-data">
+  <br><br>
+  <input type="file" name="file" style="color:white;">
+  <input class="btn btn-primary btn" type="submit" value="Upload">
+</form>
+</center>
+
+{% endblock %}

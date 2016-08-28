@@ -36,14 +36,23 @@
           <ul class="nav navbar-nav">
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a id="Signin">Sign In</a></li>
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="Signin">Sign In<strong class="caret"></strong></a>
+              <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px; height:150px;">
+                <form method="post">
+                  <input name="in_username" style="margin-bottom: 15px;" placeholder="Username" type="text" size="30" /><br>
+                  <input name="in_password" style="margin-bottom: 15px;" placeholder="Password" type="password" size="30" />
+                  <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="button" value="Sign In" />
+                </form>
+              </div>
+            </li>
             <li class="dropdown">
               <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="Signup">Sign Up<strong class="caret"></strong></a>
               <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px; height:150px;">
                 <form method="post">
-                  <input id="in_username" style="margin-bottom: 15px;" placeholder="Username" type="text" size="30" /><br>
-                  <input id="in_password" style="margin-bottom: 15px;" placeholder="Password" type="password" size="30" />
-                  <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" value="Sign Up" />
+                  <input name="up_username" style="margin-bottom: 15px;" placeholder="Username" type="text" size="30" /><br>
+                  <input name="up_password" style="margin-bottom: 15px;" placeholder="Password" type="password" size="30" />
+                  <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="button" value="Sign Up" />
                 </form>
               </div>
             </li>
@@ -55,7 +64,7 @@
           <ul class="nav navbar-nav">
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a id="Profile">Profile</a></li>
+            <li><a id="Profile" href="/profile/{{username}}">{{username}}</a></li>
             <li><a id="Logout" href="/logout">Logout</a></li>
           </ul>
           {% endif %}
