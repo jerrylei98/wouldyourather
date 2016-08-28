@@ -1,5 +1,6 @@
 from flask import Flask, render_template, session, request, redirect
 from utils import *
+from random import randint
 import os
 
 app = Flask(__name__)
@@ -10,6 +11,7 @@ def index():
     if request.method == "GET":
         return render_template("index.html", username = session.get('username'))
     elif request.method == "POST":
+        session['unique'] = num_rows()
         button = request.form['button']
         if button == "Sign In":
             uname = request.form.get('in_username')
@@ -24,6 +26,13 @@ def index():
                 session['username'] = uname
             return render_template("index.html", username = session.get('username'))
         return render_template("index.html", username = session.get('username'))
+
+@app.route("/play")
+def play():
+    game = get_ques(session['unique'])
+    session['unique'] -= 1
+    return render_template("play.html", username = session.get('username'), optA = game['optA'], optB = game['optB'], optAres = game['optAres'], optBres = game['optBres'])
+
 
 @app.route("/profile")
 @app.route("/profile/<uname>", methods=["GET","POST"])
@@ -45,6 +54,7 @@ def profile(uname = ""):
 @app.route("/logout") ##clears session
 def logout():
     session['username'] = None
+    session['unique'] = None
     return redirect("/")
 
 if __name__ == "__main__":

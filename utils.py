@@ -36,3 +36,40 @@ def check_user(user, password):
         return True
     conn.close()
     return False
+
+#=== Adds a would you rather question into database ===#
+def add_question(optA, optB):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c = c.execute("INSERT INTO game VALUES(?,0,?,0)", (optA,optB,))
+    conn.commit()
+    conn.close()
+    return True
+
+#=== Counts how many questions there are and returns a list of that length ===#
+def num_rows():
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c = c.execute("SELECT COUNT(*) FROM game")
+    num = c.fetchone()[0]
+    conn.close()
+    return num
+    """
+    l = []
+    for x in xrange(num):
+        l.append(0)
+    """
+
+#=== Get question by rowid - Returns dict containing optA, optB, optAres, optBres ===#
+def get_ques(rowid):
+    ret_dict = {}
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c = c.execute("SELECT * FROM game WHERE rowid = ?", (rowid,))
+    ret = c.fetchone()
+    ret_dict['optA'] = ret[0]
+    ret_dict['optAres'] = ret[1]
+    ret_dict['optB'] = ret[2]
+    ret_dict['optBres'] = ret[3]
+    conn.close()
+    return ret_dict
