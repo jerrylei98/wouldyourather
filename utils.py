@@ -1,5 +1,6 @@
 from os import path
 import md5
+import sqlite3
 
 """
 === Creates database.db if database is not in the main directory (runs when imported by __init__.py) ===
